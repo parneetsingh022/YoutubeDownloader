@@ -1,3 +1,5 @@
+### Please don't hesitate to report any bugs or share suggestions by creating an issue.
+
 # YoutubeDownloader
 This is a simple liberary which will allow yout to download audio and video files from youtube.
 
