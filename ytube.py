@@ -1,6 +1,6 @@
 from pytube import YouTube
 import inquirer
-from moviepy.editor import AudioFileClip
+from moviepy.editor import VideoFileClip, AudioFileClip
 from tqdm import tqdm
 import os
 import time
@@ -23,10 +23,16 @@ answers = inquirer.prompt(questions)
 if answers['type'] == 'Video':
     print("Loading available resolutions...")
     # Get the available streams and filter out audio-only streams
-    video_streams = [stream for stream in yt.streams.filter(progressive=True)]
+    video_streams = [stream for stream in yt.streams.filter(file_extension='mp4')]
 
     # Create a list of available resolutions
-    resolutions = [stream.resolution for stream in video_streams]
+    resolutions = sorted(set([stream.resolution for stream in video_streams if stream.resolution]))
+
+    # Filtering non-desired resolutions
+    resolutions = [res for res in resolutions if res in ['144p', '240p', '360p', '480p', '720p', '1080p']]
+    if '1080p' in resolutions:
+        resolutions.remove('1080p')
+        resolutions.append('1080p')  # Add 1080p to the bottom of the list
 
     # Create the questions
     questions = [
@@ -46,7 +52,20 @@ if answers['type'] == 'Video':
     print("Downloading video...")
     for i in tqdm(range(100)):
         time.sleep(0.01)  # simulate time delay
-    yt.streams.filter(progressive=True, resolution=answers['resolution']).first().download()
+    if answers['resolution'] in ['360p', '720p']:
+        yt.streams.filter(res=answers['resolution']).first().download(filename=f"{yt.title}({answers['resolution']}).mp4")
+    else:
+        video = yt.streams.filter(res=answers['resolution']).first().download(filename='video.mp4')
+        audio = yt.streams.filter(only_audio=True).first().download(filename='audio.mp3')
+
+        videoclip = VideoFileClip("video.mp4")
+        videoclip.audio = AudioFileClip("audio.mp3")
+
+        videoclip.write_videofile(f"{yt.title}({answers['resolution']}).mp4")
+
+        os.remove('video.mp4')
+        os.remove('audio.mp3')
+
     print("Video downloaded successfully.")
 else:
     print("You selected Audio")
