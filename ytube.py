@@ -56,6 +56,22 @@ def download_process(stream, filename):
     stream.download(filename=filename)
     print(f"{filename} downloaded successfully.")
 
+def combine_audio_and_video(video_filename, audio_filename, output_filename):
+    """
+    Combines the audio and video files and saves the result to the output filename.
+
+    Args:
+        video_filename (str): The filename of the video file.
+        audio_filename (str): The filename of the audio file.
+        output_filename (str): The filename to save the combined audio and video.
+    """
+    videoclip = VideoFileClip(video_filename)
+    audioclip = AudioFileClip(audio_filename)
+    videoclip.audio = audioclip
+    videoclip.write_videofile(output_filename, codec="libx264", audio_codec="aac")
+    videoclip.close()
+    audioclip.close()
+
 def download_video(yt):
     """
     Download the video from YouTube.
@@ -101,10 +117,7 @@ def download_video(yt):
         download_process(selected_stream, filename=video_filename)
         download_process(yt.streams.filter(only_audio=True).first(), filename=audio_filename)
 
-        videoclip = VideoFileClip(video_filename)
-        videoclip.audio = AudioFileClip(audio_filename)
-
-        videoclip.write_videofile(f"{yt.title}({answers['resolution']}).mp4")
+        combine_audio_and_video(video_filename, audio_filename, f"{yt.title}({answers['resolution']}).mp4")
 
         os.remove(video_filename)
         os.remove(audio_filename)
