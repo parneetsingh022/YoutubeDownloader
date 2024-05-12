@@ -7,7 +7,7 @@ How to use:
 
 Step 1: You need to have python installed in your computer in order to use it.
 
-Step 2: After you have forked and pulled the code, install the required dependencies.
+Step 2: Install the required dependencies.
 ```
 pip install requirements.txt
 ```
