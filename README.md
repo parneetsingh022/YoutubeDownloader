@@ -1,6 +1,5 @@
 
-### ${\color{green} \text{Please don't hesitate to report any bugs or share suggestions by creating an issue.}}$
-
+### Please don't hesitate to report any bugs or share suggestions by creating an issue.
 # YoutubeDownloader
 This simple tool enables you to download audio and video content from YouTube onto your device. It leverages the pytube library for its functionality.
 
