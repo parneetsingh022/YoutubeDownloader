@@ -2,6 +2,8 @@
   "config": {
     "display_name": "Youtube Downloader",
     "display": true,
-    "technologies": ["python", "pytube"]
+    "technologies": ["python", "pytube"],
+    "description": "A versatile command-line tool for downloading YouTube videos and audio. Users can select from various video quality options, ensuring tailored downloads to suit their needs.",
+    "priority": "low" 
   }
 }
